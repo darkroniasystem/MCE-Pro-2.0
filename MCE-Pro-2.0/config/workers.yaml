@@ -1,0 +1,41 @@
+# Configuración de Workers (optimizado para 1 PC)
+
+workers:
+  validate:
+    max_threads: 4
+    queue_size: 100
+    description: "I/O bound - lectura de JSONs"
+    
+  prepare:
+    max_threads: 6
+    queue_size: 200
+    description: "CPU bound - parsing y agrupación"
+    
+  enrich:
+    max_threads: 3
+    queue_size: 50
+    rate_limit_global_per_minute: 30
+    backpressure_threshold: 100
+    description: "Network bound - llamadas HTTP"
+    
+  publisher:
+    max_threads: 1
+    queue_size: 20
+    batch_size: 200
+    description: "DB bound - transacciones PostgreSQL"
+    
+  ai_analysis:
+    max_threads: 1
+    queue_size: 10
+    timeout_seconds: 120
+    description: "IA local/remota - análisis de evidencia"
+    
+  asset_downloader:
+    max_threads: 2
+    queue_size: 50
+    description: "Descarga de posters y backdrops"
+
+checkpointing:
+  enabled: true
+  save_interval_seconds: 60
+  max_checkpoints: 10

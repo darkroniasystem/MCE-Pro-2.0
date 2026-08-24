@@ -1,0 +1,61 @@
+# Configuración de Proveedores de Enriquecimiento
+# NO incluir API keys aquí (usar .env)
+
+providers:
+  tmdb:
+    enabled: true
+    priority: 1
+    rate_limit_per_minute: 40
+    categories: [peliculas, series, animadas]
+    
+  anilist:
+    enabled: true
+    priority: 1
+    rate_limit_per_minute: 90
+    categories: [anime]
+    
+  tvmaze:
+    enabled: true
+    priority: 2
+    rate_limit_per_minute: 30
+    categories: [series]
+    
+  wikidata:
+    enabled: true
+    priority: 1
+    rate_limit_per_minute: 100
+    categories: [all]
+    
+  wikipedia:
+    enabled: true
+    priority: 2
+    rate_limit_per_minute: 100
+    categories: [all]
+    
+  tavily:
+    enabled: true
+    priority: 3
+    rate_limit_per_minute: 20
+    categories: [all]
+    use_case: web_search_fallback
+    
+  serper:
+    enabled: false
+    priority: 4
+    rate_limit_per_minute: 10
+    categories: [all]
+    use_case: web_search_fallback
+    
+  exa:
+    enabled: false
+    priority: 5
+    rate_limit_per_minute: 10
+    categories: [all]
+    use_case: web_search_fallback
+    
+  groq:
+    enabled: true
+    priority: 6
+    rate_limit_per_minute: 60
+    model: gpt-oss-120b
+    use_case: ai_analysis_fallback
