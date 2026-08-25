@@ -1,7 +1,268 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "validated_scan_package",
-  "description": "PENDIENTE - Por definir en instrucciones/02_CONTRACTS.md",
+  "title": "ValidatedScanPackage",
+  "description": "El escaneo validado con metadata adicional. VALIDATE confirma que los datos son correctos.",
   "type": "object",
-  "properties": {}
+  "required": [
+    "schema_version",
+    "pipeline_id",
+    "scan_id",
+    "bank_id",
+    "created_at",
+    "updated_at",
+    "status",
+    "section_name",
+    "category",
+    "validation_status",
+    "validated_at",
+    "snapshot",
+    "records",
+    "total_records",
+    "valid_records"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "pipeline_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "scan_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "bank_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "VALIDATED",
+        "VALIDATED_WITH_WARNINGS",
+        "VALIDATION_FAILED",
+        "ANOMALOUS_SCAN"
+      ]
+    },
+    "section_name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Peliculas",
+        "Series",
+        "Novelas",
+        "Anime",
+        "Doramas",
+        "Animadas",
+        "Concursos"
+      ]
+    },
+    "scan_hash": {
+      "type": "string"
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "VALID",
+        "VALID_WITH_WARNINGS",
+        "FAILED",
+        "ANOMALOUS"
+      ]
+    },
+    "validated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "snapshot": {
+      "type": "object",
+      "required": [
+        "total_files",
+        "new",
+        "modified",
+        "unchanged",
+        "missing"
+      ],
+      "properties": {
+        "total_files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "modified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unchanged": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "previous_scan_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "previous_scan_date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "anomalies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "anomaly_id",
+          "type",
+          "severity",
+          "description",
+          "affected_records"
+        ],
+        "properties": {
+          "anomaly_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "CRITICAL",
+              "WARNING",
+              "INFO"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "affected_records": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recommendation": {
+            "type": "string",
+            "enum": [
+              "REVIEW",
+              "DISCARD",
+              "KEEP"
+            ]
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "record_id",
+          "file_path",
+          "file_name",
+          "extension",
+          "size_bytes",
+          "content_type",
+          "media_type_hint"
+        ],
+        "properties": {
+          "record_id": {
+            "type": "string"
+          },
+          "file_path": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "folder_path": {
+            "type": "string"
+          },
+          "parent_folders": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "extension": {
+            "type": "string"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "modified_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "drive_letter": {
+            "type": "string"
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "MEDIA",
+              "SUBTITLE",
+              "METADATA",
+              "NOISE",
+              "UNKNOWN"
+            ]
+          },
+          "media_type_hint": {
+            "type": "string",
+            "enum": [
+              "video",
+              "audio",
+              "subtitle",
+              "metadata",
+              "image",
+              "extra",
+              "system",
+              "other"
+            ]
+          }
+        }
+      }
+    },
+    "total_records": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "valid_records": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "invalid_records": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
 }

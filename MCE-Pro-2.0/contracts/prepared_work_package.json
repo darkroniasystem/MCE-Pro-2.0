@@ -1,7 +1,240 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "prepared_work_package",
-  "description": "PENDIENTE - Por definir en instrucciones/02_CONTRACTS.md",
+  "title": "PreparedWorkPackage",
+  "description": "Obra lógica preparada por PREPARE. Contiene títulos limpios, evidencia agrupada y clasificación.",
   "type": "object",
-  "properties": {}
+  "required": [
+    "schema_version",
+    "pipeline_id",
+    "scan_id",
+    "bank_id",
+    "created_at",
+    "updated_at",
+    "status",
+    "logical_work_id",
+    "titles",
+    "possible_year",
+    "category",
+    "prepare_confidence",
+    "physical_occurrences",
+    "evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "pipeline_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "scan_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "bank_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PREPARED",
+        "READY_FOR_ENRICHMENT",
+        "HUMAN_REVIEW"
+      ]
+    },
+    "logical_work_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "titles": {
+      "type": "object",
+      "required": [
+        "primary_local"
+      ],
+      "properties": {
+        "primary_local": {
+          "type": "string",
+          "minLength": 1
+        },
+        "original": {
+          "type": "string"
+        },
+        "spanish": {
+          "type": "string"
+        },
+        "english": {
+          "type": "string"
+        },
+        "japanese": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "possible_year": {
+      "type": "integer",
+      "minimum": 1888,
+      "maximum": 2030
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Peliculas",
+        "Series",
+        "Novelas",
+        "Anime",
+        "Doramas",
+        "Animadas",
+        "Concursos"
+      ]
+    },
+    "prepare_confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "physical_occurrences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "file_path",
+          "file_name",
+          "size_bytes"
+        ],
+        "properties": {
+          "file_path": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "folder_path": {
+            "type": "string"
+          },
+          "parent_folders": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "extension": {
+            "type": "string"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "modified_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "drive_letter": {
+            "type": "string"
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "MEDIA",
+              "SUBTITLE",
+              "METADATA"
+            ]
+          },
+          "media_type_hint": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "from_folder": {
+          "type": "boolean"
+        },
+        "from_filename": {
+          "type": "boolean"
+        },
+        "from_nfo": {
+          "type": "boolean"
+        },
+        "nfo_title": {
+          "type": "string"
+        },
+        "seasons_seen": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "is_dvd_structure": {
+          "type": "boolean"
+        },
+        "wikimedia_match": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "year": {
+              "type": "integer"
+            },
+            "confidence": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "properties": {
+        "total_files": {
+          "type": "integer"
+        },
+        "media_files": {
+          "type": "integer"
+        },
+        "subtitle_files": {
+          "type": "integer"
+        },
+        "metadata_files": {
+          "type": "integer"
+        },
+        "noise_files": {
+          "type": "integer"
+        },
+        "total_size_bytes": {
+          "type": "integer"
+        }
+      }
+    },
+    "needs_human_review": {
+      "type": "boolean"
+    },
+    "human_review_reason": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
 }

@@ -1,7 +1,200 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "publish_command",
-  "description": "PENDIENTE - Por definir en instrucciones/02_CONTRACTS.md",
+  "title": "PublishCommand",
+  "description": "Comando de publicación generado por PUBLISHER para escribir en el Catálogo Maestro.",
   "type": "object",
-  "properties": {}
+  "required": [
+    "schema_version",
+    "pipeline_id",
+    "scan_id",
+    "bank_id",
+    "created_at",
+    "updated_at",
+    "status",
+    "action",
+    "work",
+    "availability"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "pipeline_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "scan_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "bank_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "READY_TO_PUBLISH",
+        "PUBLISHED",
+        "FAILED",
+        "ROLLED_BACK"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "CREATE",
+        "ADD_AVAILABILITY",
+        "REMOVE_AVAILABILITY",
+        "ARCHIVE"
+      ]
+    },
+    "work": {
+      "type": "object",
+      "properties": {
+        "logical_work_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "canonical_title": {
+          "type": "string"
+        },
+        "original_title": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer"
+        },
+        "category": {
+          "type": "string"
+        },
+        "media_type": {
+          "type": "string"
+        },
+        "overview": {
+          "type": "string"
+        },
+        "genres": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "runtime_minutes": {
+          "type": "integer"
+        },
+        "rating_average": {
+          "type": "number"
+        },
+        "rating_votes": {
+          "type": "integer"
+        },
+        "cast": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "director": {
+          "type": "string"
+        },
+        "studio": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "external_ids": {
+          "type": "object",
+          "properties": {
+            "tmdb_id": {
+              "type": "integer"
+            },
+            "imdb_id": {
+              "type": "string"
+            },
+            "wikidata_id": {
+              "type": "string"
+            },
+            "anilist_id": {
+              "type": "integer"
+            },
+            "tvmaze_id": {
+              "type": "integer"
+            }
+          }
+        },
+        "poster_path": {
+          "type": "string"
+        },
+        "backdrop_path": {
+          "type": "string"
+        }
+      }
+    },
+    "availability": {
+      "type": "object",
+      "required": [
+        "bank_id",
+        "file_paths"
+      ],
+      "properties": {
+        "bank_id": {
+          "type": "string"
+        },
+        "drive_letter": {
+          "type": "string"
+        },
+        "file_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "total_files": {
+          "type": "integer"
+        },
+        "total_size_bytes": {
+          "type": "integer"
+        }
+      }
+    },
+    "conflicts_detected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "existing_value": {},
+          "new_value": {}
+        }
+      }
+    },
+    "preflight_passed": {
+      "type": "boolean"
+    },
+    "batch_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "transaction_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
 }

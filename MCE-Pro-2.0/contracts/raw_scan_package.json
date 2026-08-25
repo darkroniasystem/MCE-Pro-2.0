@@ -1,7 +1,188 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "raw_scan_package",
-  "description": "PENDIENTE - Por definir en instrucciones/02_CONTRACTS.md",
+  "title": "RawScanPackage",
+  "description": "JSON crudo generado por Media Scanner Local (MSL). Es la entrada bruta del sistema.",
   "type": "object",
-  "properties": {}
+  "required": [
+    "schema_version",
+    "pipeline_id",
+    "scan_id",
+    "bank_id",
+    "created_at",
+    "updated_at",
+    "status",
+    "source",
+    "scanner_version",
+    "source_folder",
+    "section_name",
+    "scan_started_at",
+    "scan_completed_at",
+    "records",
+    "total_records",
+    "total_size_bytes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Versión del contrato. Actual: 1"
+    },
+    "pipeline_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "ID único de la ejecución del pipeline"
+    },
+    "scan_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "ID único del escaneo actual"
+    },
+    "bank_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "description": "Identificador externo del banco"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Cuándo se creó este contrato"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Última modificación"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["RAW"],
+      "description": "Estado actual del paquete"
+    },
+    "source": {
+      "type": "string",
+      "const": "MSL",
+      "description": "Fuente del escaneo, siempre 'MSL'"
+    },
+    "scanner_version": {
+      "type": "string",
+      "description": "Versión del scanner que generó el JSON"
+    },
+    "source_folder": {
+      "type": "string",
+      "description": "Ruta raíz escaneada"
+    },
+    "section_name": {
+      "type": "string",
+      "description": "Nombre de la sección (Peliculas, Series, etc.)"
+    },
+    "scan_started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Inicio del escaneo"
+    },
+    "scan_completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fin del escaneo"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "record_id",
+          "file_path",
+          "file_name",
+          "folder_path",
+          "parent_folders",
+          "extension",
+          "size_bytes",
+          "modified_at",
+          "drive_letter"
+        ],
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID único del registro"
+          },
+          "file_path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Ruta completa del archivo (debe ser absoluta)"
+          },
+          "file_name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Nombre del archivo con extensión"
+          },
+          "folder_path": {
+            "type": "string",
+            "description": "Carpeta inmediata del archivo"
+          },
+          "parent_folders": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Jerarquía de carpetas desde la raíz"
+          },
+          "extension": {
+            "type": "string",
+            "pattern": "^\\.[a-zA-Z0-9]+$",
+            "description": "Extensión del archivo (debe incluir el punto, ej: .mkv)"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Tamaño en bytes"
+          },
+          "modified_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Última modificación del archivo"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fecha de creación del archivo"
+          },
+          "hash_sha256": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$",
+            "description": "Hash SHA256 si MSL lo calculó"
+          },
+          "fingerprint": {
+            "type": "string",
+            "description": "Identificador único del archivo"
+          },
+          "drive_letter": {
+            "type": "string",
+            "pattern": "^[A-Z]:$",
+            "description": "Unidad de disco (E:, F:, etc.)"
+          },
+          "is_symlink": {
+            "type": "boolean",
+            "description": "Si es enlace simbólico"
+          },
+          "is_hidden": {
+            "type": "boolean",
+            "description": "Si es archivo oculto"
+          }
+        }
+      }
+    },
+    "total_records": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total de registros (debe coincidir con len(records))"
+    },
+    "total_size_bytes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Tamaño total del escaneo"
+    }
+  },
+  "additionalProperties": false
 }

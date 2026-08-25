@@ -1,7 +1,239 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "enriched_work_package",
-  "description": "PENDIENTE - Por definir en instrucciones/02_CONTRACTS.md",
+  "title": "EnrichedWorkPackage",
+  "description": "Obra enriquecida por ENRICH con metadatos completos de proveedores externos.",
   "type": "object",
-  "properties": {}
+  "required": [
+    "schema_version",
+    "pipeline_id",
+    "scan_id",
+    "bank_id",
+    "created_at",
+    "updated_at",
+    "status",
+    "logical_work_id",
+    "identity",
+    "metadata",
+    "external_ids",
+    "field_provenance",
+    "identity_confidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "pipeline_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "scan_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "bank_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "APPROVED",
+        "APPROVED_PARTIAL",
+        "HUMAN_REVIEW",
+        "NOT_FOUND",
+        "PROVIDER_ERROR"
+      ]
+    },
+    "logical_work_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "canonical_title",
+        "year",
+        "category"
+      ],
+      "properties": {
+        "canonical_title": {
+          "type": "string"
+        },
+        "original_title": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1888,
+          "maximum": 2030
+        },
+        "category": {
+          "type": "string"
+        },
+        "media_type": {
+          "type": "string",
+          "enum": [
+            "movie",
+            "tv_series",
+            "tv_episode",
+            "anime_movie",
+            "anime_series",
+            "ova"
+          ]
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "overview": {
+          "type": "string"
+        },
+        "genres": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "runtime_minutes": {
+          "type": "integer"
+        },
+        "rating_average": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rating_votes": {
+          "type": "integer"
+        },
+        "cast": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "director": {
+          "type": "string"
+        },
+        "studio": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "awards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tagline": {
+          "type": "string"
+        }
+      }
+    },
+    "external_ids": {
+      "type": "object",
+      "properties": {
+        "tmdb_id": {
+          "type": "integer"
+        },
+        "imdb_id": {
+          "type": "string"
+        },
+        "wikidata_id": {
+          "type": "string"
+        },
+        "anilist_id": {
+          "type": "integer"
+        },
+        "tvmaze_id": {
+          "type": "integer"
+        },
+        "tvdb_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "physical_occurrences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file_path",
+          "bank_id"
+        ],
+        "properties": {
+          "file_path": {
+            "type": "string"
+          },
+          "bank_id": {
+            "type": "string"
+          },
+          "drive_letter": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "asset_candidates": {
+      "type": "object",
+      "properties": {
+        "poster_url": {
+          "type": "string"
+        },
+        "backdrop_url": {
+          "type": "string"
+        },
+        "thumbnail_url": {
+          "type": "string"
+        }
+      }
+    },
+    "field_provenance": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "identity_confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "enrichment_notes": {
+      "type": "string"
+    },
+    "needs_human_review": {
+      "type": "boolean"
+    },
+    "human_review_reason": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
 }
